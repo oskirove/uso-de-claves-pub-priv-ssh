@@ -58,3 +58,51 @@ Ahora, deberiamos poder conectarnos al usuario **`Admin`** en la máquina remota
 
 > [!NOTE]
 > Debemos asegurarnos de usar las claves con seguridad y protegerlas con contraseñas adecuadas si es necesario.
+##
+### Configuración de Acceso SSH en GitHub
+
+A continuación, configuraremos el acceso SSH en GitHub para permitir la autenticación sin necesidad de ingresar la contraseña cada vez que realicemos operaciones con Git.
+
+> [!IMPORTANT]
+> Nos aseguraremos de tener los permisos y autorizaciones necesarios para realizar estas acciones en nuestra cuenta de GitHub.
+
+**En la máquina local:**
+
+1. **Generaremos de nuevo un par de claves pública y privada:**
+   - Ejecutaremos el siguiente comando en la terminal:
+     ```bash
+     ssh-keygen -t rsa -b 2048
+     ```
+   - Presionaremos **`Enter`** para aceptar la ubicación predeterminada del archivo de la clave y proporcionaremos una contraseña o dejaremos en blanco la **`Passphrase`**.
+
+2. **Añadimos la clave SSH al agente de SSH:**
+   - Iniciamos el agente de SSH si aún no lo hemos activado:
+     ```bash
+     eval "$(ssh-agent -s)"
+     ```
+   - Añadimos nuestra clave privada al agente:
+     ```bash
+     ssh-add ~/.ssh/id_rsa
+     ```
+
+3. **Copiamos la clave pública al portapapeles:**
+   - Utilizamos el siguiente comando para copiar nuestra clave pública al portapapeles:
+     ```bash
+     cat ~/.ssh/id_rsa.pub | pbcopy
+     ```
+
+4. **Agregamos la clave SSH a nuestra cuenta de GitHub:**
+   - Accedemos a nuestra cuenta de GitHub.
+   - En la esquina superior derecha, hacemos clic en nuestro avatar y seleccionamos **`Settings"`**
+   - En la barra lateral izquierda, hacemos clic en **`SSH and GPG keys`**.
+   - Hacemos clic en **`New SSH key`** y pegamos la clave pública copiada.
+
+**Verificación de la configuración en GitHub:**
+
+5. **Probamos la conexión SSH:**
+   - En la terminal, ejecutarmos el siguiente comando para verificar la conexión:
+     ```bash
+     ssh -T git@github.com
+     ```
+   - Si es la primera vez, aceptamos la conexión escribiendo **`yes`**.
+   - Si todo ha salido de forma correcta deberiamos ver un mensaje que confirme que la autenticación fue exitosa.
